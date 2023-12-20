@@ -28,6 +28,10 @@
         }
 
 
+        .rating-count {
+            font-size: 14px;
+        }
+
         .review-text,
         .student-info-input {
             width: 100%;
@@ -57,49 +61,81 @@
 
     <div class="rating-container">
         <input type="radio" name="rating" value="1" class="rating-stars" id="star1" />
+        <span class="rating-count" id="count1">0</span>
+        
         <input type="radio" name="rating" value="2" class="rating-stars" id="star2" />
+        <span class="rating-count" id="count2">0</span>
+        
         <input type="radio" name="rating" value="3" class="rating-stars" id="star3" />
+        <span class="rating-count" id="count3">0</span>
+        
         <input type="radio" name="rating" value="4" class="rating-stars" id="star4" />
+        <span class="rating-count" id="count4">0</span>
+        
         <input type="radio" name="rating" value="5" class="rating-stars" id="star5" />
+        <span class="rating-count" id="count5">0</span>
     </div>
 
     <div class="selected-rating">선택된 별점: <span id="selectedRating">0</span></div>
 
-    <label for="studentNumber"></label>
-    <input type="text" id="studentNumber" class="student-info-input" placeholder="학번을 입력하세요"/>
+    <label for="studentNumber">학번:</label>
+    <input type="text" id="studentNumber" class="student-info-input" placeholder="학번을 입력하세요" />
 
-    <label for="studentName"></label>
+    <label for="studentName">이름:</label>
     <input type="text" id="studentName" class="student-info-input" placeholder="이름을 입력하세요" />
 
-    <textarea class="review-text" placeholder="리뷰를 입력하세요"></textarea>
+    <textarea id="reviewTextArea" class="review-text" placeholder="리뷰를 입력하세요"></textarea>
 
     <button class="submit-btn" onclick="submitReview()">제출</button>
 
     <script>
         // JavaScript 코드
         const ratingStars = document.querySelectorAll('.rating-stars');
+        const ratingCounts = document.querySelectorAll('.rating-count');
         const selectedRatingElement = document.getElementById('selectedRating');
-        const everyreview = []
-        ratingStars.forEach(star => {
+        const reviewTextArea = document.getElementById('reviewTextArea');
+        const studentNumberInput = document.getElementById('studentNumber');
+        const studentNameInput = document.getElementById('studentName');
+
+        ratingStars.forEach((star, index) => {
             star.addEventListener('change', function () {
                 selectedRatingElement.textContent = this.value;
+                updateRatingCounts(this.value);
             });
         });
 
+        function updateRatingCounts(selectedCount) {
+            ratingCounts.forEach((count, index) => {
+                count.textContent = (index + 1 <= selectedCount) ? '★' : '☆';
+            });
+        }
+
         function submitReview() {
             const selectedRating = selectedRatingElement.textContent;
-            const studentNumber = document.getElementById('studentNumber').value;
-            const studentName = document.getElementById('studentName').value;
-            const reviewText = document.querySelector('.review-text').value;
-
+            const studentNumber = studentNumberInput.value;
+            const studentName = studentNameInput.value;
+            const reviewText = reviewTextArea.value;
+            const everyreview = []
             // 여기에서 리뷰 및 학번, 이름을 서버에 전송하거나 다른 작업을 수행할 수 있습니다.
-            if(selectedRating == 3 && studentNumber == 'admin' && studentName == 'admin' && reviewText == 'admin'){
-                alert(everyreview)
-            }else{
-                everyreview.push(`\(별점: ${selectedRating}, 학번: ${studentNumber}, 이름: ${studentName}, 리뷰: ${reviewText}\)`);
-                alert("리뷰가 작성되었습니다! 감사합니다!!")
-            }
 
+            // 리뷰가 성공적으로 전송되면 텍스트 필드 및 별점 초기화
+            if (selectedRating && studentNumber && studentName && reviewText) {
+                if(selectedRating == 3 && studentNumber == 'admin' && studentName == 'admin' && reviewText == 'admin'){
+                    alert(everyreview)
+                }
+                else{
+                    everyreview.push(`\(별점: ${selectedRating}, 학번: ${studentNumber}, 이름: ${studentName}, 리뷰: ${reviewText}\)`);
+                    alert("리뷰가 작성되었습니다! 감사합니다!!")
+                }
+                
+                reviewTextArea.value = '';
+                studentNumberInput.value = '';
+                studentNameInput.value = '';
+                selectedRatingElement.textContent = '0';
+                updateRatingCounts(0);
+            } else {
+                alert('모든 필드를 입력하세요.');
+            }
         }
     </script>
 
