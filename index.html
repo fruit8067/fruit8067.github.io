@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>별점 및 리뷰</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .rating-container {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .rating-stars {
+            unicode-bidi: bidi-override;
+            color: #e0e0e0;
+            font-size: 30px;
+            height: 30px;
+            width: 150px;
+            margin: 0 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+
+        .review-text,
+        .student-info-input {
+            width: 100%;
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none; /* 크기 조절 비활성화 */
+        }
+
+        .submit-btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .selected-rating {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rating-container">
+        <input type="radio" name="rating" value="1" class="rating-stars" id="star1" />
+        <input type="radio" name="rating" value="2" class="rating-stars" id="star2" />
+        <input type="radio" name="rating" value="3" class="rating-stars" id="star3" />
+        <input type="radio" name="rating" value="4" class="rating-stars" id="star4" />
+        <input type="radio" name="rating" value="5" class="rating-stars" id="star5" />
+    </div>
+
+    <div class="selected-rating">선택된 별점: <span id="selectedRating">0</span></div>
+
+    <label for="studentNumber"></label>
+    <input type="text" id="studentNumber" class="student-info-input" placeholder="학번을 입력하세요"/>
+
+    <label for="studentName"></label>
+    <input type="text" id="studentName" class="student-info-input" placeholder="이름을 입력하세요" />
+
+    <textarea class="review-text" placeholder="리뷰를 입력하세요"></textarea>
+
+    <button class="submit-btn" onclick="submitReview()">제출</button>
+
+    <script>
+        // JavaScript 코드
+        const ratingStars = document.querySelectorAll('.rating-stars');
+        const selectedRatingElement = document.getElementById('selectedRating');
+        const everyreview = []
+        ratingStars.forEach(star => {
+            star.addEventListener('change', function () {
+                selectedRatingElement.textContent = this.value;
+            });
+        });
+
+        function submitReview() {
+            const selectedRating = selectedRatingElement.textContent;
+            const studentNumber = document.getElementById('studentNumber').value;
+            const studentName = document.getElementById('studentName').value;
+            const reviewText = document.querySelector('.review-text').value;
+
+            // 여기에서 리뷰 및 학번, 이름을 서버에 전송하거나 다른 작업을 수행할 수 있습니다.
+            if(selectedRating == 3 && studentNumber == 'admin' && studentName == 'admin' && reviewText == 'admin'){
+                alert(everyreview)
+            }else{
+                everyreview.push(`별점: ${selectedRating}, 학번: ${studentNumber}, 이름: ${studentName}, 리뷰: ${reviewText}`);
+                alert("리뷰가 작성되었습니다! 감사합니다!")
+            }
+
+        }
+    </script>
+
+</body>
+</html>
